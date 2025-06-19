@@ -1,32 +1,42 @@
 import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { styled } from 'styled-components/native';
+import { AppTheme } from '@/types/theme'; // <- Tipagem manual que criamos
 
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const Container = styled.View<{ theme: AppTheme }>`
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: ${({ theme }) => theme.background};
+`;
+
+const Title = styled.Text<{ theme: AppTheme }>`
+    font-family: ${({ theme }) => theme.FontFamilies.title};
+    font-size: ${({ theme }) => theme.FontSizes.xl}px;
+    font-weight: ${({ theme }) => theme.FontWeights.bold};
+    color: ${({ theme }) => theme.primaryDark};
+`;
+
+const GoHome = styled.Text<{ theme: AppTheme }>`
+    margin-top: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-family: ${({ theme }) => theme.FontFamilies.text};
+    color: ${({ theme }) => theme.primary};
+    font-weight: ${({ theme }) => theme.FontWeights.bold};
+    font-size: ${({ theme }) => theme.FontSizes.md}px;
+`;
 
 export default function NotFoundScreen() {
-  return (
-    <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
-      <ThemedView style={styles.container}>
-        <ThemedText type="title">This screen does not exist.</ThemedText>
-        <Link href="/" style={styles.link}>
-          <ThemedText type="link">Go to home screen!</ThemedText>
-        </Link>
-      </ThemedView>
-    </>
-  );
+    return (
+        <>
+            <Stack.Screen options={{ title: 'Oops!' }} />
+            <Container>
+                <Title>Esta tela não existe.</Title>
+                <Link href="/">
+                    <GoHome>Ir para a tela inicial!</GoHome>
+                </Link>
+            </Container>
+        </>
+    );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-});

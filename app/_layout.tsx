@@ -1,29 +1,33 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
+import { ThemeProvider as NavThemeProvider, DarkTheme, DefaultTheme } from '@react-navigation/native';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components/native';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { lightTheme, darkTheme } from '@/constants/theme';
+
+// Fontes:
+import { useFonts as usePoppins, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import { useFonts as useInter, Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+    const colorScheme = useColorScheme();
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+    const [poppinsLoaded] = usePoppins({ Poppins_700Bold });
+    const [interLoaded] = useInter({ Inter_400Regular, Inter_700Bold });
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    const fontsLoaded = poppinsLoaded && interLoaded;
+
+    if (!fontsLoaded) return null;
+
+    return (
+        <NavThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <StyledThemeProvider theme={colorScheme === 'dark' ? darkTheme : lightTheme}>
+                <Stack>
+                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                    <Stack.Screen name="+not-found" />
+                </Stack>
+                <StatusBar style="auto" />
+            </StyledThemeProvider>
+        </NavThemeProvider>
+    );
 }

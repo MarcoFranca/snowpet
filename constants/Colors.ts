@@ -1,26 +1,48 @@
+// constants/Colors.ts
+
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Paleta oficial de cores SnowPet App
+ * Padrão para uso consistente em todo o projeto
+ * Alinhado com dossiê, Figma e identidade visual
  */
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
-
 export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-  },
+  // Neutras
+  white:    "#FFFFFF",
+  black:    "#000000",
+  background: "#F7F9FB",    // Fundo do app
+  surface:    "#FFFFFF",    // Cards, campos, etc.
+  border:     "#E0E4EA",    // Bordas e divisores
+
+  // Primárias
+  primary:      "#7CD1F9",  // Azul claro principal
+  primaryDark:  "#2A64A6",  // Azul escuro (textos, contraste)
+  accent:       "#FFC1DA",  // Rosa/pêssego
+
+  // Texto
+  text:           "#222A35", // Texto principal
+  textSecondary:  "#687076", // Texto secundário/subtítulo
+  textInverse:    "#FFFFFF", // Para botões ou fundos escuros
+
+  // Feedback
+  success: "#39C09B",  // Verde
+  warning: "#FFDF7C",  // Amarelo
+  error:   "#FF8181",  // Vermelho
+
+  // Outras variações (opcional)
+  info:    "#33C9FF",  // Azul de informação
+  shadow:  "#00000010", // Sombra leve
 };
+
+// Para Dark Mode (opcional — use quando quiser)
+export const DarkColors = {
+  ...Colors,
+  background: "#181F27",
+  surface: "#232E3C",
+  text: "#F1F6FA",
+  textSecondary: "#A1A9B7",
+  border: "#2D3C50",
+  shadow: "#00000050",
+};
+
+export default Colors;
