@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {
-    View, Text, TextInput, TouchableOpacity, ActivityIndicator, StyleSheet, Alert, SafeAreaView, KeyboardAvoidingView, Platform
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    ActivityIndicator,
+    StyleSheet,
+    Alert,
+    SafeAreaView,
+    KeyboardAvoidingView,
+    Platform
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { signInWithEmailAndPassword, signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
 import { FIREBASE_AUTH } from '@/firebaseConfig';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
@@ -16,16 +25,16 @@ import * as Animatable from 'react-native-animatable';
 
 WebBrowser.maybeCompleteAuthSession();
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+
     const router = useRouter();
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         androidClientId: '318399033671-3f5s01i0aud3cloq3q40vq5s5mlp7pqh.apps.googleusercontent.com',
         clientId: '318399033671-r1jn0cfuoeig89ics2f61bqesci2ac0p.apps.googleusercontent.com',
-        // iosClientId...
     });
 
     useEffect(() => {
@@ -38,17 +47,18 @@ export default function LoginScreen() {
         }
     }, [response]);
 
-    const handleLogin = async () => {
+    const handleSignUp = async () => {
         if (!email || !password) {
             Alert.alert('Erro', 'Preencha e-mail e senha');
             return;
         }
         setLoading(true);
         try {
-            await signInWithEmailAndPassword(FIREBASE_AUTH, email.trim(), password);
+            await createUserWithEmailAndPassword(FIREBASE_AUTH, email.trim(), password);
+            Alert.alert('Sucesso', 'Usuário criado com sucesso!');
             router.replace('/(tabs)');
         } catch (error: any) {
-            Alert.alert('Erro no login', error.message);
+            Alert.alert('Erro no cadastro', error.message);
         } finally {
             setLoading(false);
         }
@@ -56,7 +66,10 @@ export default function LoginScreen() {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: Colors.primary }}>
-            <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
                 <View style={styles.container}>
                     <Animatable.Image
                         source={require('@/assets/images/adaptive-icon.png')}
@@ -64,19 +77,25 @@ export default function LoginScreen() {
                         duration={1200}
                         style={styles.logo}
                     />
-                    <View style={{ flexDirection: 'row', alignItems: 'center', margin: 10, gap: 0 }}>
-                        <Text style={styles.title}>Bem-vindo ao SnowPet</Text>
-                        <Animatable.View animation="pulse" iterationCount="infinite" duration={1800} delay={700} useNativeDriver>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', margin: 10 }}>
+                        <Text style={styles.title}>Cadastro no SnowPet</Text>
+                        <Animatable.View
+                            animation="pulse"
+                            iterationCount="infinite"
+                            duration={1800}
+                            delay={700}
+                            useNativeDriver
+                        >
                             <PawIcon width={32} height={32} fill={Colors.white} style={{ marginLeft: -32 }} />
                         </Animatable.View>
                     </View>
-                    <Text style={styles.subtitle}>Faça login para acessar os dados dos seus pets</Text>
+                    <Text style={styles.subtitle}>Crie sua conta para começar a organizar a rotina do seu pet!</Text>
 
                     <Animatable.View animation="fadeInUp" delay={400} style={{ width: '100%' }}>
                         <TouchableOpacity style={styles.socialButton} onPress={() => promptAsync()}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <GoogleIcon width={20} height={20} style={{ marginRight: 8 }} />
-                                <Text style={styles.socialButtonText}>Entrar com Google</Text>
+                                <Text style={styles.socialButtonText}>Continuar com Google</Text>
                             </View>
                         </TouchableOpacity>
                     </Animatable.View>
@@ -84,7 +103,7 @@ export default function LoginScreen() {
                         <TouchableOpacity style={[styles.socialButton, { backgroundColor: '#222' }]} disabled>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <AntDesign name="apple1" size={22} color="#fff" style={{ marginRight: 8 }} />
-                                <Text style={[styles.socialButtonText, { color: '#fff' }]}>Entrar com Apple (em breve)</Text>
+                                <Text style={[styles.socialButtonText, { color: '#fff' }]}>Continuar com Apple (em breve)</Text>
                             </View>
                         </TouchableOpacity>
                     </Animatable.View>
@@ -116,17 +135,17 @@ export default function LoginScreen() {
                         />
                     </Animatable.View>
                     <Animatable.View animation="fadeInUp" delay={1150} style={{ width: '100%' }}>
-                        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+                        <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
                             {loading ? (
                                 <ActivityIndicator color={Colors.primaryDark} />
                             ) : (
-                                <Text style={styles.buttonText}>Entrar</Text>
+                                <Text style={styles.buttonText}>Cadastrar</Text>
                             )}
                         </TouchableOpacity>
                     </Animatable.View>
                     <Animatable.View animation="fadeInUp" delay={1300} style={{ width: '100%' }}>
-                        <TouchableOpacity onPress={() => router.replace('/register')}>
-                            <Text style={styles.linkText}>Não tem conta? Cadastre-se</Text>
+                        <TouchableOpacity onPress={() => router.replace('/login')}>
+                            <Text style={styles.linkText}>Já tem conta? Faça login</Text>
                         </TouchableOpacity>
                     </Animatable.View>
                 </View>
@@ -139,14 +158,14 @@ const styles = StyleSheet.create({
     container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
     logo: { height: 180, resizeMode: 'contain', marginBottom: 12 },
     title: {
-        ...FontTokens.H2, // Título intermediário, padronizado
+        ...FontTokens.H2,
         color: Colors.primaryDark,
         textAlign: 'center',
         marginBottom: 4,
         width: '80%',
     },
     subtitle: {
-        ...FontTokens.Subtitle, // Token que você pode criar ou usar H3/BodyBold
+        ...FontTokens.Subtitle, // Adapte para Subtitle ou BodyBold conforme o seu tokens
         color: Colors.textSecondary,
         textAlign: 'center',
         marginBottom: 18,
@@ -165,7 +184,7 @@ const styles = StyleSheet.create({
     },
     socialButtonText: {
         ...FontTokens.Button,
-        color: Colors.text, // ou #333 se quiser bem neutro
+        color: Colors.text,
         fontWeight: "bold",
         fontSize: 16,
     },

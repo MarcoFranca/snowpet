@@ -2,7 +2,7 @@
 
 export const FontFamilies = {
     title: "Poppins",
-    text: "Inter",
+    text: "Nunito",
 };
 
 export const FontWeights = {
@@ -33,19 +33,27 @@ export const FontSizes = {
 
 export const FontTokens = {
     // Títulos (Poppins)
-    H1:    { fontFamily: "Poppins_700Bold", fontSize: 34, lineHeight: 40 },
+    H1:    { fontFamily: "Poppins_800ExtraBold", fontSize: 34, lineHeight: 40 },
     H2:    { fontFamily: "Poppins_700Bold", fontSize: 28, lineHeight: 34 },
     H3:    { fontFamily: "Poppins_700Bold", fontSize: 22, lineHeight: 28 },
 
-    // Texto principal (Inter)
-    Body:      { fontFamily: "Inter_400Regular", fontSize: 16, lineHeight: 24 },
-    BodyBold:  { fontFamily: "Inter_700Bold",    fontSize: 16, lineHeight: 24 },
-    Small:     { fontFamily: "Inter_400Regular", fontSize: 14, lineHeight: 20 },
-    Caption:   { fontFamily: "Inter_400Regular", fontSize: 12, lineHeight: 16 },
+    // Subtítulo/Destaque (Nunito)
+    Subtitle:   { fontFamily: "Nunito_700Bold", fontSize: 20, lineHeight: 26 },
+    Highlight:  { fontFamily: "Nunito_700Bold", fontSize: 18, lineHeight: 24 },
+
+    // Texto principal (Nunito)
+    Body:       { fontFamily: "Nunito_400Regular", fontSize: 16, lineHeight: 24 },
+    BodyItalic: { fontFamily: "Nunito_400Regular_Italic", fontSize: 16, lineHeight: 24 },
+    BodyBold:   { fontFamily: "Nunito_700Bold", fontSize: 16, lineHeight: 24 },
+    Small:      { fontFamily: "Nunito_400Regular", fontSize: 14, lineHeight: 20 },
+    Caption:    { fontFamily: "Nunito_400Regular", fontSize: 12, lineHeight: 16 },
+
+    // Citação (Nunito Italic)
+    Quote:      { fontFamily: "Nunito_400Regular_Italic", fontSize: 16, lineHeight: 24, fontStyle: "italic" },
 
     // Botões
-    Button:    { fontFamily: "Inter_700Bold", fontSize: 16, lineHeight: 20 },
-    ButtonSm:  { fontFamily: "Inter_700Bold", fontSize: 14, lineHeight: 18 },
+    Button:     { fontFamily: "Nunito_700Bold", fontSize: 16, lineHeight: 20 },
+    ButtonSm:   { fontFamily: "Nunito_700Bold", fontSize: 14, lineHeight: 18 },
 };
 
 /**

@@ -1,33 +1,56 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { ThemeProvider as NavThemeProvider, DarkTheme, DefaultTheme } from '@react-navigation/native';
-import { ThemeProvider as StyledThemeProvider } from 'styled-components/native';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { lightTheme, darkTheme } from '@/constants/theme';
+import { AuthGate } from '@/components/AuthGate';
+import { useFonts, Poppins_800ExtraBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import {
+    Nunito_400Regular,
+    Nunito_400Regular_Italic,
+    Nunito_700Bold,
+    Nunito_700Bold_Italic,
+    Nunito_800ExtraBold,
+    Nunito_800ExtraBold_Italic,
+} from '@expo-google-fonts/nunito';
 
-// Fontes:
-import { useFonts as usePoppins, Poppins_700Bold } from '@expo-google-fonts/poppins';
-import { useFonts as useInter, Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter';
+import { Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+
 
 export default function RootLayout() {
-    const colorScheme = useColorScheme();
+    const [fontsLoaded] = useFonts({
+        Poppins_800ExtraBold,
+        Poppins_700Bold,
+        Inter_400Regular,
+        Inter_700Bold,
+        Nunito_400Regular,
+        Nunito_400Regular_Italic,
+        Nunito_700Bold,
+        Nunito_700Bold_Italic,
+        Nunito_800ExtraBold,
+        Nunito_800ExtraBold_Italic,
+    });
 
-    const [poppinsLoaded] = usePoppins({ Poppins_700Bold });
-    const [interLoaded] = useInter({ Inter_400Regular, Inter_700Bold });
+    useEffect(() => {
+        if (fontsLoaded) {
+            SplashScreen.hideAsync();
+        }
+    }, [fontsLoaded]);
 
-    const fontsLoaded = poppinsLoaded && interLoaded;
-
-    if (!fontsLoaded) return null;
+    if (!fontsLoaded) {
+        return null; // Ou pode exibir um Loading bonito
+    }
 
     return (
-        <NavThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <StyledThemeProvider theme={colorScheme === 'dark' ? darkTheme : lightTheme}>
-                <Stack>
-                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                    <Stack.Screen name="+not-found" />
-                </Stack>
-                <StatusBar style="auto" />
-            </StyledThemeProvider>
-        </NavThemeProvider>
+        <AuthGate>
+            <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="welcome" options={{ headerShown: false }} />
+                <Stack.Screen name="login" options={{ headerShown: false }} />
+                <Stack.Screen name="register" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+        </AuthGate>
     );
 }
+

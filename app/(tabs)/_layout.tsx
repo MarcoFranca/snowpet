@@ -12,11 +12,8 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarActiveTintColor: Colors.primary,
                 headerShown: false,
-                // Não precisa de tabBarButton nem tabBarBackground se for padrão!
                 tabBarStyle: Platform.select({
-                    ios: {
-                        position: 'absolute',
-                    },
+                    ios: { position: 'absolute' },
                     default: {},
                 }),
             }}>
@@ -25,13 +22,6 @@ export default function TabLayout() {
                 options={{
                     title: 'Home',
                     tabBarIcon: ({ color }) => <Feather name="home" size={28} color={color} />,
-                }}
-            />
-            <Tabs.Screen
-                name="explore"
-                options={{
-                    title: 'Explorar',
-                    tabBarIcon: ({ color }) => <Feather name="search" size={28} color={color} />,
                 }}
             />
         </Tabs>

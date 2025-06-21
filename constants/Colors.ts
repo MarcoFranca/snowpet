@@ -16,6 +16,7 @@ export const Colors = {
 
   // Primárias
   primary:      "#7CD1F9",  // Azul claro principal
+  secundary:    "#00AEEF",
   primaryDark:  "#2A64A6",  // Azul escuro (textos, contraste)
   accent:       "#FFC1DA",  // Rosa/pêssego
 
@@ -32,6 +33,7 @@ export const Colors = {
   // Outras variações (opcional)
   info:    "#33C9FF",  // Azul de informação
   shadow:  "#00000010", // Sombra leve
+  pawYellow: "#FFE08A",
 };
 
 // Para Dark Mode (opcional — use quando quiser)
