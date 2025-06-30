@@ -1,9 +1,9 @@
 // app/(tabs)/index.tsx
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Image, ScrollView , SafeAreaView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
 import { FIREBASE_AUTH, FIREBASE_DB } from '@/firebaseConfig';
 import { Colors } from '@/constants/Colors';
@@ -29,8 +29,11 @@ export default function HomeScreen() {
         router.replace('/welcome');
     };
 
+
     useEffect(() => {
-        const fetchPets = async () => {
+        let unsubscribe: (() => void) | undefined;
+
+        const listenPets = async () => {
             setLoading(true);
             try {
                 const userId = FIREBASE_AUTH.currentUser?.uid;
@@ -40,21 +43,34 @@ export default function HomeScreen() {
                     collection(FIREBASE_DB, 'pets'),
                     where('ownerId', '==', userId)
                 );
-                const snapshot = await getDocs(petsQuery);
-                const petsList = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-                setPets(petsList);
+
+                unsubscribe = onSnapshot(petsQuery, (snapshot) => {
+                    const petsList = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data(),
+                    }));
+                    setPets(petsList);
+                    setLoading(false);
+                }, (err) => {
+                    setPets([]);
+                    setLoading(false);
+                    console.error(err);
+                });
             } catch (error) {
                 console.error(error);
                 setPets([]);
+                setLoading(false);
             }
-            setLoading(false);
         };
 
-        fetchPets();
+        listenPets();
+
+        // Limpa o listener ao sair da tela
+        return () => {
+            if (unsubscribe) unsubscribe();
+        };
     }, []);
+
 
     if (loading) {
         return (
@@ -65,7 +81,8 @@ export default function HomeScreen() {
     }
 
     return (
-        <ScrollView style={styles.container} contentContainerStyle={{ marginTop:16, paddingBottom: 36 }}>
+        <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={{ marginTop:16, paddingBottom: 36 }}>
             {/* Header com mascote e saudação */}
             <View style={styles.header}>
                 <Image source={require('@/assets/icons/mascot_snow.png')} style={styles.mascot} />
@@ -134,6 +151,7 @@ export default function HomeScreen() {
                 <Text style={styles.logoutText}>Sair</Text>
             </TouchableOpacity>
         </ScrollView>
+        </SafeAreaView>
     );
 }
 

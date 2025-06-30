@@ -59,6 +59,12 @@ export default function TabLayout() {
                     href: null, // Esconde da tab bar!
                 }}
             />
+            <Tabs.Screen
+                name="pets/[id]/edit"
+                options={{
+                    href: null, // Esconde da tab bar!
+                }}
+            />
 
         </Tabs>
     );
